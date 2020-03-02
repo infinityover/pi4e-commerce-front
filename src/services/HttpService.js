@@ -1,24 +1,24 @@
 const axios = require('axios');
 
-
-  function Get (url, endpoint) {
-    return axios.get(url+endpoint);
+const api = 'http://api-senacsp-ecommerce.herokuapp.com/api/v1/'
+  async function Get (endpoint) {
+    return await axios.get(api+endpoint);
   }
 
-  function Post (url, endpoint, object) {
-    return axios.post(url+endpoint, object);
+  function Post (endpoint, object) {
+    return axios.post(api+endpoint, object);
   }
 
-  function Put (url, endpoint, object) {
-    return axios.put(url+endpoint, object);
+  function Put (endpoint, object) {
+    return axios.put(api+endpoint, object);
   }
 
-  function Delete (url, endpoint) {
-    return axios.delete(url+endpoint);
+  function Delete (endpoint) {
+    return axios.delete(api+endpoint);
   }
 
-  function Patch (url, endpoint, object) {
-    return axios.patch(url+endpoint, object);
+  function Patch (endpoint, object) {
+    return axios.patch(api+endpoint, object);
   }
 
 
