@@ -34,3 +34,8 @@ div.footer{
     margin: 1.75rem auto;
   }
 }
+
+img.product-image{
+  width: 80px;
+  height: 80px;
+}
