@@ -20,6 +20,7 @@ function ProductList() {
   const [QA, setQA] = useState([]);
   const [QADeleted, setQADeleted] = useState([]);
   const [imgArray, setImgArray] = useState([]);
+  const [imgShowArray, setImgShowArray] = useState([]);
 
   async function loadProducts(){
     setList([]);
@@ -90,6 +91,28 @@ function ProductList() {
 
   async function deleteProduct(id){
     await Delete('products/'+id);
+  }
+
+  
+  async function setImages(event){
+    let images = [];
+    if (event.target.files && event.target.files[0]) {
+      setImgShowArray([]);
+      var files = event.target.files;
+      for (const element of files) {
+        if (!element.type.match('image.*')) {
+          continue;
+        }
+  
+        let reader = new FileReader();
+        reader.onload = async(e) => {
+          await setImgShowArray([...imgShowArray, {"buffer": e.target.result}]);
+        };
+        reader.readAsDataURL(element);
+        console.log(imgShowArray)
+      }
+    }
+    console.log(imgShowArray)
   }
 
   async function handleSubmit(e){
@@ -182,10 +205,13 @@ function ProductList() {
             <label>Preço:</label><input type="number" className="form-control" placeholder="Preço" value={price} onChange={e => setPrice(e.target.value)}/>
             <label>Qtd estoque:</label><input type="number" className="form-control" placeholder="Quantidade em estoque" value={quantity} onChange={e => setQuantity(e.target.value)}/>
             <label>Descrição:</label><input type="text" className="form-control" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required/>
-            <label>Imagens:</label><input type="file" multiple accept="image/*"/>
-
-
+            <label>Imagens:</label><input type="file" multiple accept="image/*" onChange={setImages}/>
           </div>
+          {imgShowArray.map((item,index) => (
+              <img key={index} src={ item.buffer } className="input-images"/>
+              )
+            )
+          }
           <table className="table table-striped">
         <thead>
           <tr>
