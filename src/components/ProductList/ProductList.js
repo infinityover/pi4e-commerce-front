@@ -19,8 +19,8 @@ function ProductList() {
   const [description, setDescription] = useState('');
   const [QA, setQA] = useState([]);
   const [QADeleted, setQADeleted] = useState([]);
-  const [imgArray, setImgArray] = useState([]);
-  const [imgShowArray, setImgShowArray] = useState([]);
+  const [imgs, setImgs] = useState([]);
+  const [imgsB64, setImgsB64] = useState([]);
 
   async function loadProducts(){
     setList([]);
@@ -49,7 +49,6 @@ function ProductList() {
     setQuantity(0);
     setDescription("");
     setQA([]);
-    setImgArray([]);
   }
 
   const setData = async (item) => {
@@ -58,8 +57,15 @@ function ProductList() {
     setPrice(item.price);
     setQuantity(item.quantity);
     setDescription(item.description);
-    await setQA(item.questionAndAnswers);
-    setImgArray(item.links);
+    setPathImgs(item.links);
+  }
+
+  function setPathImgs(item){
+    let links = [];
+    item.forEach(element => {
+      links.push({id: element.id,path: element.imageFullPath});
+    });
+    setImgs(links);
   }
 
 
@@ -91,29 +97,14 @@ function ProductList() {
 
   async function deleteProduct(id){
     await Delete('products/'+id);
+    loadProducts();
   }
 
-  
-  async function setImages(event){
-    let images = [];
-    if (event.target.files && event.target.files[0]) {
-      setImgShowArray([]);
-      var files = event.target.files;
-      for (const element of files) {
-        if (!element.type.match('image.*')) {
-          continue;
-        }
-  
-        let reader = new FileReader();
-        reader.onload = async(e) => {
-          await setImgShowArray([...imgShowArray, {"buffer": e.target.result}]);
-        };
-        reader.readAsDataURL(element);
-        console.log(imgShowArray)
-      }
-    }
-    console.log(imgShowArray)
+  async function insertImgs(){
+    await Patch('products/images/'+id, {files: imgsB64});
+    loadProducts();
   }
+
 
   async function handleSubmit(e){
     e.preventDefault();
@@ -134,12 +125,41 @@ function ProductList() {
       });
 
       if(QADeleted.length > 0) deleteQA();
-      // await Patch('products/questions-answers/'+id,{
-      //   "questionsAndAnswers": [...QA]
-      // });
+      if(imgs.length > 0) insertImgs();
+      if(QA.length > 0) insertQA();
     }
     handleClose();
-}
+  };
+  
+  function insertQA(){
+    Patch('products/questions-answers/'+id,{
+      "questionsAndAnswers": [...QA]
+    });
+  }
+
+  async function uploadMultipleFiles(e){
+    let fileObj = [];
+    let fileArray = imgs;
+    
+    fileObj.push(e.target.files)
+
+    for (let i = 0; i < fileObj[0].length; i++) {
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          setImgsB64([...imgsB64, {buffer: e.target.result.split(',')[1]}]);
+        }
+        console.log(fileObj[0][i])
+        
+        reader.readAsDataURL(fileObj[0][i]);
+
+        fileArray.push({path: URL.createObjectURL(fileObj[0][i])} )
+
+        console.log(reader);
+
+    }
+    setImgs(fileArray)
+  }
 
   useEffect(() => {
     loadProducts();
@@ -205,13 +225,18 @@ function ProductList() {
             <label>Preço:</label><input type="number" className="form-control" placeholder="Preço" value={price} onChange={e => setPrice(e.target.value)}/>
             <label>Qtd estoque:</label><input type="number" className="form-control" placeholder="Quantidade em estoque" value={quantity} onChange={e => setQuantity(e.target.value)}/>
             <label>Descrição:</label><input type="text" className="form-control" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required/>
-            <label>Imagens:</label><input type="file" multiple accept="image/*" onChange={setImages}/>
+            <label>Imagens:</label><input type="file" className="form-control" onChange={uploadMultipleFiles} multiple accept="image/*" />
           </div>
-          {imgShowArray.map((item,index) => (
-              <img key={index} src={ item.buffer } className="input-images"/>
-              )
-            )
-          }
+          
+          <div className="form-group multi-preview">
+            {imgs.map((url,indx) => (
+                <>
+                <img src={url.path} alt="..." className="preview" key={indx}/>  
+                <span class="close"></span>
+                </>
+
+            ))}
+          </div>
           <table className="table table-striped">
         <thead>
           <tr>
