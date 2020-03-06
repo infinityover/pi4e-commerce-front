@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const api = 'http://api-senacsp-ecommerce.herokuapp.com/api/v1/'
+const api = 'https://api-senacsp-ecommerce.herokuapp.com/api/v1/'
   async function Get (endpoint) {
     return await axios.get(api+endpoint);
   }
