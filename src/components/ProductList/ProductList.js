@@ -38,7 +38,6 @@ function ProductList() {
 
   const handleShow = (item, alt = null) => {
     if (alt){
-      console.log(alt);
       setAltQtd(true);
     } 
     if(item){
@@ -65,6 +64,8 @@ function ProductList() {
     setQuantity(item.quantity);
     setDescription(item.description);
     setPathImgs(item.links);
+    setQA(item.questionAndAnswers);
+    console.log(item.questionAndAnswers);
   }
 
   function setPathImgs(item){
@@ -77,13 +78,13 @@ function ProductList() {
 
 
   function setQuestion(question,index){
-    QA[index].question = question;
+    QA[index].questionAndAnswer.question = question;
     setQA([...QA]);
   }
 
 
   function setAnswer(answer,index){
-    QA[index].answer = answer
+    QA[index].questionAndAnswer.answer = answer
     setQA([...QA]);
   }
 
@@ -129,9 +130,7 @@ function ProductList() {
         quantity,
         description,
       });
-      console.log(product.data.data.productId)
       await setId(product.data.data.productId);
-      console.log(id)
     }else{
       await Put("products/"+id,{
         name,
@@ -151,9 +150,17 @@ function ProductList() {
   };
   
   async function insertQA(prodId){
-    await Post('products/questions-answers/'+prodId,{
-      "questionsAndAnswers": [...QA]
-    });
+    for (const element of QA) {
+      if(element.id){
+        await Put('questions-and-answers/'+element.id,{
+          "questionsAndAnswer": element.questionAndAnswer
+        });
+      }else{
+        await Post('questions-and-answers/'+prodId,{
+          "questionsAndAnswer": element.questionAndAnswer
+        });
+      }
+    }
   }
 
   function deleteImg(index){
@@ -251,10 +258,10 @@ function ProductList() {
           
           <div className="form-group multi-preview">
             {imgs.map((url,indx) => (
-                <>
-                  <img src={url.path} alt="..." className="preview" key={indx}/>
+                <div key={indx} className="form-group multi-preview">
+                  <img src={url.path} alt="..." className="preview" />
                   <button type="button" className="btn btn-danger" disabled={altQtd} onClick={e => deleteImg(indx)}>Excluir</button>
-                </>
+                </div>
               ))}
             </div>
           <table className="table table-striped">
@@ -267,8 +274,8 @@ function ProductList() {
         <tbody>
           {QA.map((item,index) => (
             <tr key={index}>
-              <td><input type="text" className="form-control" placeholder="Pergunta" value={item.question} onChange={e => setQuestion(e.target.value, index)} required/></td>
-              <td><input type="text" className="form-control" placeholder="Resposta" value={item.answer} onChange={e => setAnswer(e.target.value, index)} required/></td>
+              <td><input type="text" className="form-control" placeholder="Pergunta" value={item.questionAndAnswer.question} onChange={e => setQuestion(e.target.value, index)} required/></td>
+              <td><input type="text" className="form-control" placeholder="Resposta" value={item.questionAndAnswer.answer} onChange={e => setAnswer(e.target.value, index)} required/></td>
               <td><button className="btn btn-danger" type="submit" onClick={e => removeQA(index)}>Remover</button></td>
             </tr>
             ))

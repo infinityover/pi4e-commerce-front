@@ -5,19 +5,19 @@ const api = 'http://api-senacsp-ecommerce.herokuapp.com/api/v1/'
     return await axios.get(api+endpoint);
   }
 
-  function Post (endpoint, object) {
+  async function Post (endpoint, object) {
     return axios.post(api+endpoint, object);
   }
 
-  function Put (endpoint, object) {
+  async function Put (endpoint, object) {
     return axios.put(api+endpoint, object);
   }
 
-  function Delete (endpoint) {
+  async function Delete (endpoint) {
     return axios.delete(api+endpoint);
   }
 
-  function Patch (endpoint, object) {
+  async function Patch (endpoint, object) {
     return axios.patch(api+endpoint, object);
   }
 
