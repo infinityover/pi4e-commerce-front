@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 import './ProductList.css';
-import { Get, Post, Put, Patch, Delete } from '../../services/HttpService';
+import { Get, Post, Put, Delete } from '../../services/HttpService';
 import Modal from 'react-bootstrap/Modal'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
@@ -11,6 +11,7 @@ function ProductList() {
 
   const [list, setList] = useState([]);
   const [show, setShow] = useState(false);
+  const [altQtd, setAltQtd] = useState(false);
 
   const [id, setId] = useState('');
   const [name, setName] = useState('');
@@ -21,6 +22,7 @@ function ProductList() {
   const [QADeleted, setQADeleted] = useState([]);
   const [imgs, setImgs] = useState([]);
   const [imgsB64, setImgsB64] = useState([]);
+  const [imgsDeleted, setImgsDeleted] = useState([]);
 
   async function loadProducts(){
     setList([]);
@@ -32,10 +34,13 @@ function ProductList() {
   const handleClose = () => {
     setClearData();
     setShow(false);
-    loadProducts();
   }
 
-  const handleShow = (item) => {
+  const handleShow = (item, alt = null) => {
+    if (alt){
+      console.log(alt);
+      setAltQtd(true);
+    } 
     if(item){
       setData(item);
     }
@@ -49,6 +54,8 @@ function ProductList() {
     setQuantity(0);
     setDescription("");
     setQA([]);
+    setImgsDeleted([]);
+    setAltQtd(false);
   }
 
   const setData = async (item) => {
@@ -90,57 +97,74 @@ function ProductList() {
 
   async function deleteQA(){
     for (var element of QADeleted) {
-      console.log(element.id);
       if(element.id) await Delete('questions-and-answers/'+element.id);
     }
   }
 
-  async function deleteProduct(id){
-    await Delete('products/'+id);
+  function deleteImgs(){
+    console.log(imgsDeleted)
+    imgsDeleted.forEach(element => { 
+      console.log(element)
+      if(element.id) Delete('products/images/'+element.id);
+    });
+  }
+
+  async function deleteProduct(prodId){
+    await Delete('products/'+prodId);
     loadProducts();
   }
 
-  async function insertImgs(){
-    await Patch('products/images/'+id, {files: imgsB64});
-    loadProducts();
+  async function insertImgs(prodId){
+    await Post('products/images/'+prodId, {files: imgsB64});
   }
 
 
   async function handleSubmit(e){
     e.preventDefault();
-
+    let product;
     if(!id) {
-      const product = await Post("products",{
+      product = await Post("products",{
         name,
         price,
         quantity,
         description,
       });
+      console.log(product.data.data.productId)
+      await setId(product.data.data.productId);
+      console.log(id)
     }else{
       await Put("products/"+id,{
         name,
         price,
         quantity,
         description,
-      });
-
-      if(QADeleted.length > 0) deleteQA();
-      if(imgs.length > 0) insertImgs();
-      if(QA.length > 0) insertQA();
+      });    
     }
+
+    if(QADeleted.length > 0) await deleteQA();
+    if(imgsB64.length > 0) await insertImgs(id || product.data.data.productId);
+    if(QA.length > 0) await insertQA(id || product.data.data.productId);
+    if(imgsDeleted.length>0) await deleteImgs();
+
     handleClose();
+    loadProducts();
   };
   
-  function insertQA(){
-    Patch('products/questions-answers/'+id,{
+  async function insertQA(prodId){
+    await Post('products/questions-answers/'+prodId,{
       "questionsAndAnswers": [...QA]
     });
+  }
+
+  function deleteImg(index){
+    setImgsDeleted([...imgsDeleted, imgs[index]]);
+    imgs.splice(index,1);
+    setImgs([...imgs]);
   }
 
   async function uploadMultipleFiles(e){
     let fileObj = [];
     let fileArray = imgs;
-    
     fileObj.push(e.target.files)
 
     for (let i = 0; i < fileObj[0].length; i++) {
@@ -149,13 +173,9 @@ function ProductList() {
         reader.onload = function(e) {
           setImgsB64([...imgsB64, {buffer: e.target.result.split(',')[1]}]);
         }
-        console.log(fileObj[0][i])
-        
         reader.readAsDataURL(fileObj[0][i]);
-
         fileArray.push({path: URL.createObjectURL(fileObj[0][i])} )
 
-        console.log(reader);
 
     }
     setImgs(fileArray)
@@ -191,6 +211,7 @@ function ProductList() {
               <td>{item.description}</td>
               <td className='column-command'>
                 <button className="btn btn-primary" type="submit" onClick={e => handleShow(item)}>Editar</button>
+                <button className="btn btn-primary" type="submit" onClick={e => handleShow(item, 'alt')}>Alterar Quantidade</button>
                 <button type="button" className="btn btn-danger" onClick={e => deleteProduct(item.id)}>Excluir</button>
               </td>
             </tr>
@@ -220,23 +241,22 @@ function ProductList() {
         <Modal.Body>
           <div className="modal-form">
             <input hidden value={id} onChange={e => setId(e.target.value)}/>
-            <label>Nome:</label><input type="text" className="form-control" placeholder="Nome do produto" value={name}
+            <label>Nome:</label><input readOnly={altQtd} type="text" className="form-control" placeholder="Nome do produto" value={name}
                 onChange={e => setName(e.target.value)} required/>
-            <label>Preço:</label><input type="number" className="form-control" placeholder="Preço" value={price} onChange={e => setPrice(e.target.value)}/>
+            <label>Preço:</label><input type="number" readOnly={altQtd} className="form-control" placeholder="Preço" value={price} onChange={e => setPrice(e.target.value)}/>
             <label>Qtd estoque:</label><input type="number" className="form-control" placeholder="Quantidade em estoque" value={quantity} onChange={e => setQuantity(e.target.value)}/>
-            <label>Descrição:</label><input type="text" className="form-control" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required/>
-            <label>Imagens:</label><input type="file" className="form-control" onChange={uploadMultipleFiles} multiple accept="image/*" />
+            <label>Descrição:</label><input type="text" readOnly={altQtd} className="form-control" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required/>
+            <label>Imagens:</label><input type="file" disabled={altQtd} className="form-control" onChange={uploadMultipleFiles} multiple accept="image/*" />
           </div>
           
           <div className="form-group multi-preview">
             {imgs.map((url,indx) => (
                 <>
-                <img src={url.path} alt="..." className="preview" key={indx}/>  
-                <span class="close"></span>
+                  <img src={url.path} alt="..." className="preview" key={indx}/>
+                  <button type="button" className="btn btn-danger" disabled={altQtd} onClick={e => deleteImg(indx)}>Excluir</button>
                 </>
-
-            ))}
-          </div>
+              ))}
+            </div>
           <table className="table table-striped">
         <thead>
           <tr>
@@ -255,7 +275,7 @@ function ProductList() {
           }
         </tbody>
       </table>
-      <button className="btn btn-primary" type="submit" onClick={e => addQA()}>Adicionar</button>
+      <button className="btn btn-primary" disabled={altQtd} type="submit" onClick={e => addQA()}>Adicionar</button>
       </Modal.Body>
         <Modal.Footer>
           <button type="button" className="btn btn-danger" onClick={handleClose}>Cancelar</button>
@@ -266,7 +286,5 @@ function ProductList() {
   </>
   );
 }
-
-
 
 export default ProductList;
