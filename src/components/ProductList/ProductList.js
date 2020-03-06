@@ -88,7 +88,7 @@ function ProductList() {
     setQA([...QA]);
   }
 
-  const addQA = () => setQA([...QA, {"question":"", "answer":""}]);
+  const addQA = () => setQA([...QA, {"id":"","questionAndAnswer":{ "question":"", "answer":""}} ]);
 
   const removeQA = (index) => {
     setQADeleted([...QADeleted, QA[index]])
