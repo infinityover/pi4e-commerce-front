@@ -47,6 +47,9 @@ function ProductList() {
   }
 
   const setClearData = () =>{
+  setQADeleted([]);
+  setImgs([]);
+  setImgsB64([]);
     setId("");
     setName("");
     setPrice(0);
@@ -65,7 +68,6 @@ function ProductList() {
     setDescription(item.description);
     setPathImgs(item.links);
     setQA(item.questionAndAnswers);
-    console.log(item.questionAndAnswers);
   }
 
   function setPathImgs(item){
@@ -156,8 +158,8 @@ function ProductList() {
           "questionsAndAnswer": element.questionAndAnswer
         });
       }else{
-        await Post('questions-and-answers/'+prodId,{
-          "questionsAndAnswer": element.questionAndAnswer
+        await Post('products/questions-answers/'+prodId,{
+          "questionsAndAnswers":  [ element.questionAndAnswer ]
         });
       }
     }
