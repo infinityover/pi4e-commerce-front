@@ -213,7 +213,7 @@ function ProductList() {
         <tbody>
           {list.map((item,index) => (
             <tr key={index}>
-              <th><img src={item.links[0] ? item.links[0].imageFullPath : productFiller} className='product-image'/></th>
+              <th><img src={item.links[0] ? item.links[0].imageFullPath : productFiller} className='product-image' alt="Imagem do produto"/></th>
               <th scope="row">{item.name}</th>
               <td>{item.price}</td>
               <td>{item.quantity}</td>

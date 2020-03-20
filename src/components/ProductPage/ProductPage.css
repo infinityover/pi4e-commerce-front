@@ -1,0 +1,31 @@
+Image.product-image{
+  max-height: 170px;
+}
+
+
+h4,h6{
+  color: black;
+}
+
+div.product{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+div.image, div.products-datails{
+  align-self: center;
+  justify-self: center;
+  margin-top: 30px;
+}
+
+div.QA{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  
+}
+
+
+div.QA > H4{
+  border-style: solid;
+}
