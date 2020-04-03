@@ -1,12 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
-import './ProductListMain.css';
+import './HomePage.css';
 import { Get } from '../../services/HttpService';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
 import ProductCard from '../ProductCard/ProductCard'
 
-function ProductListMain() {
+function HomePage() {
 
   const [list, setList] = useState([]);
   async function loadProducts(){
@@ -38,4 +38,4 @@ function ProductListMain() {
   );
 }
 
-export default ProductListMain;
+export default HomePage;

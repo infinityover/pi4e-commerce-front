@@ -1,0 +1,25 @@
+section.card-link{
+  height: 10.25rem;
+  box-shadow: 3px 6px 5px 5px #00000030;
+  width: 10.25rem;
+  border-radius: 10px;
+  margin: 30px 50px;
+  display: grid;
+  grid-template-rows: 2fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+main#admin-options-body{
+  display: flex;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+p.description{
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0rem;
+  color: black;
+}

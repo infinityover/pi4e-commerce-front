@@ -12,7 +12,7 @@ class ProductCard extends Component {
       <>
       <Link href={'/product/?id='+this.props.property.id}>
       <Box maxW="sm" borderWidth="1px" rounded="lg" >
-        <Image src={this.props.property.links ? this.props.property.links[0].imageFullPath : productFiller} alt="Imagem do produto" maxHeight='170px' />
+        <Image src={this.props.property.links ? this.props.property.links[0].imageFullPath : productFiller} alt="Imagem do produto" maxHeight='170px' height='170px' />
 
         <Box p="6">
           <Box d="flex" alignItems="baseline">

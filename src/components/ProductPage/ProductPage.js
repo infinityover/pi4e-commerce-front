@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductPage.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
-import { Box, Image, Badge, Link, Button  } from '@chakra-ui/core';
+import { Image, Button  } from '@chakra-ui/core';
 import useQuery from './useQuery';
 import Loader from 'react-loader-spinner'
 
