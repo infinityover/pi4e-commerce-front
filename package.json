@@ -13,6 +13,7 @@
     "bootstrap": "^4.4.1",
     "emotion-theming": "^10.0.27",
     "formik": "^2.1.4",
+    "jsrsasign": "^8.0.15",
     "rc-dialog": "^7.6.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.17",
@@ -21,6 +22,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-text-mask": "^5.4.3",
     "redux": "^4.0.5"
   },
   "scripts": {

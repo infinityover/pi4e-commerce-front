@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import { FormControl, FormLabel, Input, FormHelperText, Button} from '@chakra-ui/core';
 import person from '../../assets/personStrokeBlack.svg';
@@ -17,7 +17,6 @@ const Login = () => {
   const [loading,setLoading] = useState(false);
   const [login,setLogin] = useState({login: '', password: ''});
 
-  //{user:body.nome,type:body.userType,auth:body.token}
   function setUserStore(body){
     return {
       type: 'LOGIN',

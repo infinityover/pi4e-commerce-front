@@ -18,8 +18,8 @@ function App() {
     <ThemeProvider>
       <ColorModeProvider>
         <div className="App">
-          <Header/>
           <Provider store={user}>
+            <Header/>
             <Router>
               <Switch>
                 <Route path="/adminProductList">

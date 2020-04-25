@@ -14,6 +14,20 @@
   border:0;    
 }
 
+
+div.myAccont{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-self: center;
+  justify-items: center;
+  cursor: pointer;
+}
+
+div.myAccont p{
+  color: white;
+  font-weight: bold;
+}
+
 header.site-header{
   background: var(--orange);
   width: 100%;

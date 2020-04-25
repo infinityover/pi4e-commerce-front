@@ -2,7 +2,7 @@ const axios = require('axios');
 
 
 
-const api = 'https://api-senacsp-ecommerce.herokuapp.com/api/v1/'
+const api = 'http://localhost/api/v1/'
   async function Get (endpoint, auth=null) {
     return await axios.get(api+endpoint,  auth);
   }
@@ -23,5 +23,9 @@ const api = 'https://api-senacsp-ecommerce.herokuapp.com/api/v1/'
     return axios.patch(api+endpoint, object, auth);
   }
 
+  async function GetCep(cep){
+    return await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+  }
 
-export { Get, Post, Put, Delete, Patch} ;
+
+export { Get, Post, Put, Delete, Patch, GetCep} ;

@@ -31,7 +31,6 @@ function ProductList() {
       setProduct(item);
     }
     setShow(true);
-    console.log(show);
   }
 
   async function deleteProduct(prodId){
