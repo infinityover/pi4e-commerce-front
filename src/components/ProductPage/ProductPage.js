@@ -3,9 +3,11 @@ import './ProductPage.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import { Image, Button  } from '@chakra-ui/core';
 import useQuery from './useQuery';
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Get } from '../../services/HttpService';
+import { persistor } from '../../store';
 
 function ProductPage(){
   
@@ -15,6 +17,9 @@ function ProductPage(){
   const [product, setProduct] = useState({});
 
   const productFiller = 'https://www.pngitem.com/pimgs/m/84-849583_cardboard-box-png-box-png-transparent-png.png';
+
+  const modules = useSelector(state => state);
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
@@ -28,6 +33,13 @@ function ProductPage(){
      response.data.data.itens.forEach(element => {
       if(element.id == id) setProduct(element);
     });
+  }
+
+  function handleAddCart(){
+    console.log(dispatch({type: "ADD", product: product}))
+    persistor.subscribe(ok => console.log("ok",ok), err=> console.log('err',err));
+    persistor.dispatch({type: "ADD", product: product})
+    console.log(modules.cart)
   }
   
   
@@ -55,7 +67,7 @@ function ProductPage(){
         height="48px"
         width="200px"
         border="2px"
-        borderColor="green.500"
+        borderColor="green.500" onClick={e => handleAddCart()}
       >
         Comprar
       </Button>

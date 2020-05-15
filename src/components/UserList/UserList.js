@@ -26,7 +26,7 @@ function UserList() {
 
   async function loadProducts(){
     setList([]);
-    const response = await Get('users', { headers: { Authorization: `Bearer ${modules.auth}` } });
+    const response = await Get('users', { headers: { Authorization: `Bearer ${modules.user.auth}` } });
     setList( response.data.data.itens.filter(item => (!item.active) ? false : true));
   }
 
@@ -48,7 +48,7 @@ function UserList() {
   }
 
   async function deleteHandle(){
-    await Delete('users/'+itemToDelete, { headers: { Authorization: `Bearer ${modules.auth}` } });
+    await Delete('users/'+itemToDelete, { headers: { Authorization: `Bearer ${modules.user.auth}` } });
     loadProducts();
     setIsOpen(false);
   }
@@ -60,7 +60,7 @@ function UserList() {
   }
 
   useEffect(() => {
-    if(!modules.auth) history.push('/login')
+    if(!modules.user.auth || modules.user.type !== "Administrator") history.push('/login')
     loadProducts();
 
   },[])

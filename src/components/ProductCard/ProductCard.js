@@ -7,7 +7,6 @@ const productFiller = 'https://www.pngitem.com/pimgs/m/84-849583_cardboard-box-p
 
 class ProductCard extends Component {
   render (){
-    console.log(this.props)
     return(
       <>
       <Link href={'/product/?id='+this.props.property.id}>

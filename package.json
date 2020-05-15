@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "currency-formatter": "^1.5.5",
     "emotion-theming": "^10.0.27",
     "formik": "^2.1.4",
     "jsrsasign": "^8.0.15",
@@ -23,7 +24,9 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-text-mask": "^5.4.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-localstore": "^0.4.0",
+    "redux-persist": "^6.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

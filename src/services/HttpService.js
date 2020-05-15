@@ -2,7 +2,7 @@ const axios = require('axios');
 
 
 
-const api = 'http://localhost/api/v1/'
+const api = 'http://localhost:9000/api/v1/'
   async function Get (endpoint, auth=null) {
     return await axios.get(api+endpoint,  auth);
   }

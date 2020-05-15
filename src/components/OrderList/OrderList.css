@@ -1,0 +1,10 @@
+div.order-list{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  padding-bottom: 10px;
+}
+
+main.page-body{
+  
+  padding: 30px;
+}

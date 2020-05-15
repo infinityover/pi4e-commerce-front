@@ -61,7 +61,7 @@ function UserModal(props) {
         password,
         name,
         userType,
-      }, { headers: { Authorization: `Bearer ${modules.auth}` } });
+      }, { headers: { Authorization: `Bearer ${modules.user.auth}` } });
       await setId(product.data.data.productId);
     }else{
       await Put("users/"+id,{
@@ -69,7 +69,7 @@ function UserModal(props) {
         password,
         name,
         userType,
-      }, { headers: { Authorization: `Bearer ${modules.auth}` } });    
+      }, { headers: { Authorization: `Bearer ${modules.user.auth}` } });    
     }
     handleClose();
   };

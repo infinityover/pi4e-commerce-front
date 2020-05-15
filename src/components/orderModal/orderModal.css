@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+
+div.modal-form-order{
+  width: 95%;
+  display: grid;
+  grid-template-columns: 1fr !important;
+  align-self: center;
+  row-gap: 10px;
+  margin-bottom: 10px;
+}

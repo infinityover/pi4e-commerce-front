@@ -11,15 +11,17 @@ const CostumerModal = (props) =>  {
 
   useEffect(() => {
     setShow(props.show);
-    console.log(modules);
-    if(modules.costumer){
+    if(modules.user.costumer){
       setCostumer(modules.costumer);
       setAdress(modules.address);
       setCreateAccount(true);
-    }else if(modules.auth) setCreateAccount(true);
+    }else if(modules.user.auth) setCreateAccount(true);
   },[])
 
   const modules = useSelector(state => state);
+
+
+  console.log(modules)
   const dispatch = useDispatch();
 
   const [showPassword, setshowPassword] = useState(false);
@@ -32,11 +34,17 @@ const CostumerModal = (props) =>  {
   const btnRef = useRef();
   const cancelRef = useRef();
   
+  function logout(){
+    dispatch({type: 'LOGOUT'});
+    props.setShow(false)
+  }
+
   async function handleLogin(){
     setLoading(true);
     Post('auth', {email: costumer.email, senha: costumer.password}).then(res => {
-      dispatch(setUserStore(res.data.data))
+      console.log(dispatch(setUserStore(res.data.data)))
       setLoading(false);
+      props.setShow(false)
     })
   }
 
@@ -83,8 +91,6 @@ const CostumerModal = (props) =>  {
     setCostumer({ email:'', cpf:'', name:'', password:'', repeatPassword: '', address: address });
   }
 
-  const setData = async (item) => {
-  }
 
   async function handleSubmit(e){
     e.preventDefault();
@@ -96,8 +102,8 @@ const CostumerModal = (props) =>  {
     setLoading(true);
     if(validate()){ onOpen();}
     else{
-      if(modules.auth){
-        Put('shoppers',generatePayload(), { headers: { Authorization: `Bearer ${modules.auth}` } }).then(
+      if(modules.user.auth){
+        Put('shoppers',generatePayload(), { headers: { Authorization: `Bearer ${modules.user.auth}` } }).then(
 
         )
       }else{
@@ -105,7 +111,6 @@ const CostumerModal = (props) =>  {
           Post('auth', {email: costumer.email, senha: costumer.password}).then(res =>{
             dispatch(setUserStore(res.data.data));
             setLoading(false);
-            console.log(modules);
           })
         ).catch(err => {
           if(err){
@@ -222,7 +227,7 @@ const CostumerModal = (props) =>  {
         {createAccount &&
         <Modal.Footer>
           <Button variantColor="red" size="md" loadingText="Enviando" onClick={handleClose}>Canelar</Button>
-          <Button variantColor="green" size="md" isLoading={loading} loadingText="Enviando" onClick={e => handleCreate()}>Login</Button>
+          <Button variantColor="green" size="md" isLoading={loading} loadingText="Enviando" onClick={e => logout()}>Logout</Button>
         </Modal.Footer>
         }
       </Modal>

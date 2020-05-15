@@ -15,10 +15,12 @@ function AdminOptions(){
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const links = [ { description: 'Gerenciamento de usuarios', path:'/UserList', img:person}, { description: 'Gerenciamento de produtos', path:'/adminProductList', img:cart}]
+  const links = [ { description: 'Gerenciamento de usuarios', path:'/UserList', img:person}, 
+                  { description: 'Gerenciamento de produtos', path:'/adminProductList', img:cart},
+                  { description: 'Gerenciamento de pedidos', path:'/adminOrders', img:person},]
   
   console.log(modules)
-  if(!modules.auth){
+  if(!modules.user.auth || modules.user.type !== "Administrator"){
     history.push('/login')
     return(<></>)
   }else{

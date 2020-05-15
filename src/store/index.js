@@ -1,19 +1,27 @@
-import { createStore } from 'redux'
+import { combineReducers, createStore } from "redux";
+import storage from 'redux-persist/lib/storage';
+import {persistStore,persistReducer} from 'redux-persist';
 
-function login(state={}, action){
 
-    switch(action.type){
-        case 'LOGIN':
-            return {user:action.nome,type:action.userType,auth:action.token}
-        case 'LOGINCOSTUMER':
-            return {user:action.nome,type:action.userType,auth:action.token,costumer:action.costumer,address:action.address}
-        case 'LOGOUT':
-            return {}
-        default:
-            return {}
-    }
+import cart from './cart';
+import user from './user';
+
+const combinedReducer = combineReducers({
+        user,
+        cart
+    });
+
+
+const persistConfig = {
+    key: "pi4",
+    storage
 }
 
-const user = createStore(login)
+const persistedReducer = persistReducer(persistConfig, combinedReducer);
 
-export default user;
+const store = createStore(persistedReducer);
+const persistor = persistStore(store);
+
+
+
+export { store, persistor} ;

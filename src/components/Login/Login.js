@@ -28,8 +28,12 @@ const Login = () => {
 
   async function getLogin(){
       const response  =  await Post('auth', {email: login.login, senha:login.password});
-      console.log( dispatch(setUserStore(response.data.data)));
-    }
+      dispatch(setUserStore(response.data.data));
+  }
+
+  async function logout(){
+    dispatch({type: 'LOGOUT'});
+}
 
   async function handleSend(){
     setLoading(true);
@@ -38,7 +42,7 @@ const Login = () => {
   }
     return(
     <>
-    {!modules || !modules.auth &&
+    {!modules || !modules.user.auth && modules.user.type !== "Administrator" &&
       <div className='login-page-body'>
         <FormControl className='login-page-form'>
           <FormLabel htmlFor="email">E-mail</FormLabel>
@@ -61,7 +65,7 @@ const Login = () => {
 
       }
     {
-      modules.auth && history.push('/admin')
+      modules.user.auth && modules.user.type == "Administrator" && history.push('/admin')
     }
     </>
     )

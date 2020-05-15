@@ -1,0 +1,15 @@
+div.product-list{
+}
+
+div.product-line{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
+}
+
+Input.product-quantity{
+  height: 50%;
+  width: 70%;
+  border: 1px solid #0000002e;
+  border-radius: 10px;
+}
