@@ -14,7 +14,7 @@
     "currency-formatter": "^1.5.5",
     "emotion-theming": "^10.0.27",
     "formik": "^2.1.4",
-    "jsrsasign": "^8.0.15",
+    "jsrsasign": "^10.2.0",
     "rc-dialog": "^7.6.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.17",
